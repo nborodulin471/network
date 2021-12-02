@@ -9,22 +9,14 @@ import java.net.Socket;
 
 public class Server implements AutoCloseable {
 
-    ServerSocket serverSocket;
-    Socket clientSocket;
-    PrintWriter out;
-    BufferedReader in;
+    public void start(int port) {
 
-    public void start(int port) throws IOException {
-        System.out.println("Starting server");
-        serverSocket = new ServerSocket(port);
-        clientSocket = serverSocket.accept();
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    }
+        try (ServerSocket serverSocket = new ServerSocket(port); Socket clientSocket = serverSocket.accept();
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
-    public void welcome() throws IOException {
+            System.out.println("Starting server");
 
-        try {
             out.println("Write your name?");
             final String name = in.readLine();
 
@@ -42,16 +34,12 @@ public class Server implements AutoCloseable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            clientSocket.close();
-            in.close();
-            out.close();
         }
+
     }
 
     @Override
-    public void close() throws IOException {
-        serverSocket.close();
+    public void close() {
         System.out.println("Server is closed");
     }
 }

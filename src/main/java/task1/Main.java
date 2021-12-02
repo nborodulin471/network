@@ -4,7 +4,6 @@ import task1.client.Client;
 import task1.server.Server;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main {
 
@@ -13,8 +12,7 @@ public class Main {
         new Thread(() -> {
             try (Server server = new Server()) {
                 server.start(8080);
-                server.welcome();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
